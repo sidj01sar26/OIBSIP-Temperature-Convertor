@@ -1,45 +1,58 @@
-let celsiusInput = document.querySelector('#celsius > input')
-let fahrenheitInput = document.querySelector('#fahrenheit > input')
-let kelvinInput = document.querySelector('#kelvin > input')
+document.addEventListener("DOMContentLoaded", function () {
+    const celsiusInput = document.querySelector("#celsius > input");
+    const fahrenheitInput = document.querySelector("#fahrenheit > input");
+    const kelvinInput = document.querySelector("#kelvin > input");
+    const clearButton = document.querySelector(".button button");
 
-let btn = document.querySelector('.button button')
+    function roundNumber(number) {
+        return Math.round(number * 100) / 100;
+    }
 
-function roundNumber(number) {
-    return Math.round(number * 100) / 100
-}
+    function convertCelsiusToFahrenheitAndKelvin(cTemp) {
+        const fTemp = (cTemp * 9) / 5 + 32;
+        const kTemp = cTemp + 273.15;
+        return [fTemp, kTemp];
+    }
 
-/* Celcius to Fahrenheit and Kelvin */
-celsiusInput.addEventListener('input', function () {
-    let cTemp = parseFloat(celsiusInput.value)
-    let fTemp = (cTemp * (9 / 5)) + 32
-    let kTemp = cTemp + 273.15
+    function convertFahrenheitToCelsiusAndKelvin(fTemp) {
+        const cTemp = ((fTemp - 32) * 5) / 9;
+        const kTemp = ((fTemp - 32) * 5) / 9 + 273.15;
+        return [cTemp, kTemp];
+    }
 
-    fahrenheitInput.value = roundNumber(fTemp)
-    kelvinInput.value = roundNumber(kTemp)
-})
+    function convertKelvinToCelsiusAndFahrenheit(kTemp) {
+        const cTemp = kTemp - 273.15;
+        const fTemp = (kTemp - 273.15) * (9 / 5) + 32;
+        return [cTemp, fTemp];
+    }
 
-/* Fahrenheit to Celcius and Kelvin */
-fahrenheitInput.addEventListener('input', function () {
-    let fTemp = parseFloat(fahrenheitInput.value)
-    let cTemp = (fTemp - 32) * (5 / 9)
-    let kTemp = (fTemp - 32) * (5 / 9) + 273.15
+    function updateTemperatureInputs(celsius, fahrenheit, kelvin) {
+        celsiusInput.value = roundNumber(celsius);
+        fahrenheitInput.value = roundNumber(fahrenheit);
+        kelvinInput.value = roundNumber(kelvin);
+    }
 
-    celsiusInput.value = roundNumber(cTemp)
-    kelvinInput.value = roundNumber(kTemp)
-})
+    celsiusInput.addEventListener("input", function () {
+        const cTemp = parseFloat(celsiusInput.value);
+        const [fTemp, kTemp] = convertCelsiusToFahrenheitAndKelvin(cTemp);
+        updateTemperatureInputs(cTemp, fTemp, kTemp);
+    });
 
-/* Kelvin to Celcius and Fahrenheit */
-kelvinInput.addEventListener('input', function () {
-    let kTemp = parseFloat(kelvinInput.value)
-    let cTemp = kTemp - 273.15
-    let fTemp = (kTemp - 273.15) * (9 / 5) + 32
+    fahrenheitInput.addEventListener("input", function () {
+        const fTemp = parseFloat(fahrenheitInput.value);
+        const [cTemp, kTemp] = convertFahrenheitToCelsiusAndKelvin(fTemp);
+        updateTemperatureInputs(cTemp, fTemp, kTemp);
+    });
 
-    celsiusInput.value = roundNumber(cTemp)
-    fahrenheitInput.value = roundNumber(fTemp)
-})
+    kelvinInput.addEventListener("input", function () {
+        const kTemp = parseFloat(kelvinInput.value);
+        const [cTemp, fTemp] = convertKelvinToCelsiusAndFahrenheit(kTemp);
+        updateTemperatureInputs(cTemp, fTemp, kTemp);
+    });
 
-btn.addEventListener('click', () => {
-    celsiusInput.value = ""
-    fahrenheitInput.value = ""
-    kelvinInput.value = ""
-})
+    clearButton.addEventListener("click", () => {
+        celsiusInput.value = "";
+        fahrenheitInput.value = "";
+        kelvinInput.value = "";
+    });
+});
